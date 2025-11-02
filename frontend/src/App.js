@@ -5,8 +5,11 @@ import Home from "./pages/Home";
 import Properties from "./pages/Properties";
 import SafetyInsights from "./pages/SafetyInsights";
 import AIAnalyzer from "./pages/AIAnalyzer";
-import Login from "./pages/Login";
+import PropertyDetail from "./pages/PropertyDetail";
+import AgreementAnalyzer from "./pages/AgreementAnalyzer";
+import AddProperty from "./pages/AddProperty";
 import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -20,8 +23,11 @@ function App() {
             <Route path="/properties" element={<Properties />} />
             <Route path="/safety" element={<SafetyInsights />} />
             <Route path="/analyzer" element={<AIAnalyzer />} />
-            <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/property/:id" element={<PropertyDetail />} />
+            <Route path="/analyzer" element={<AgreementAnalyzer />} />
+            <Route path="/add-property" element={<AddProperty />} />
           </Routes>
         </main>
 
