@@ -1,15 +1,25 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Navbar() {
+  const { user, token, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const isLoggedIn = !!token;
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
   return (
     <nav className="bg-white shadow-md py-4">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-4">
-        {/* Logo */}
         <NavLink to="/" className="text-2xl font-bold text-blue-600">
           StreetSmart AI
         </NavLink>
 
-        {/* Nav Links */}
         <div className="hidden md:flex gap-6 text-gray-700 font-medium">
           <NavLink
             to="/"
@@ -19,6 +29,7 @@ export default function Navbar() {
           >
             Home
           </NavLink>
+
           <NavLink
             to="/properties"
             className={({ isActive }) =>
@@ -27,6 +38,7 @@ export default function Navbar() {
           >
             Properties
           </NavLink>
+
           <NavLink
             to="/analyzer"
             className={({ isActive }) =>
@@ -35,31 +47,45 @@ export default function Navbar() {
           >
             AI Analyzer
           </NavLink>
-          <NavLink
-            to="/add-property"
-            className={({ isActive }) =>
-              isActive ? "text-blue-600" : "hover:text-blue-600"
-            }
-          >
-            Add Property
-          </NavLink>
+
+          {/* ONLY OWNERS CAN SEE "ADD PROPERTY" */}
+          {user?.role === "landlord" && (
+            <NavLink
+              to="/add-property"
+              className={({ isActive }) =>
+                isActive ? "text-blue-600" : "hover:text-blue-600"
+              }
+            >
+              Add Property
+            </NavLink>
+          )}
         </div>
 
-        {/* Login & Signup Buttons */}
         <div className="flex gap-3">
-          <NavLink
-            to="/login"
-            className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition"
-          >
-            Login
-          </NavLink>
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition"
+            >
+              Logout
+            </button>
+          ) : (
+            <>
+              <NavLink
+                to="/login"
+                className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition"
+              >
+                Login
+              </NavLink>
 
-          <NavLink
-            to="/signup"
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-          >
-            Sign Up
-          </NavLink>
+              <NavLink
+                to="/signup"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              >
+                Sign Up
+              </NavLink>
+            </>
+          )}
         </div>
       </div>
     </nav>

@@ -10,7 +10,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // 🧩 move the check *after* hooks, not before them
   if (!auth) {
     return (
       <p className="text-center py-20 text-red-600">
