@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import API from "../utils/api";
+import { AuthContext } from "../context/AuthContext";
 
 export default function AddProperty() {
+  const { user, token } = useContext(AuthContext); // Get logged-in user + token
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -16,17 +19,19 @@ export default function AddProperty() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
+  // Update form data
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
     try {
-      // Convert features (comma-separated) to array
+      // Convert comma-separated values into arrays
       const featuresArray = formData.features
         .split(",")
         .map((f) => f.trim())
@@ -37,6 +42,7 @@ export default function AddProperty() {
         .map((i) => i.trim())
         .filter(Boolean);
 
+      // Property data
       const newProperty = {
         title: formData.title,
         description: formData.description,
@@ -46,13 +52,20 @@ export default function AddProperty() {
         state: formData.state,
         features: featuresArray,
         images: imagesArray,
-        safety_score: Math.floor(Math.random() * 10) + 1, // random for now
-        owner: "6710xxxxxx", // TODO: replace with logged-in user's ID
+        safety_score: Math.floor(Math.random() * 10) + 1,
+        owner: user?._id, // Logged-in landlord ID
       };
 
-      await API.post("/properties", newProperty);
+      // API request with JWT
+      await API.post("/properties", newProperty, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setMessage("✅ Property added successfully!");
+
+      // Clear form
       setFormData({
         title: "",
         description: "",
@@ -78,6 +91,7 @@ export default function AddProperty() {
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+
         {/* Title */}
         <div>
           <label className="block font-medium text-gray-700 mb-1">Title</label>
@@ -108,7 +122,9 @@ export default function AddProperty() {
 
         {/* Price */}
         <div>
-          <label className="block font-medium text-gray-700 mb-1">Price (₹/month)</label>
+          <label className="block font-medium text-gray-700 mb-1">
+            Price (₹/month)
+          </label>
           <input
             type="number"
             name="price"
@@ -122,7 +138,9 @@ export default function AddProperty() {
         {/* Address, City, State */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block font-medium text-gray-700 mb-1">Address</label>
+            <label className="block font-medium text-gray-700 mb-1">
+              Address
+            </label>
             <input
               type="text"
               name="address"
@@ -132,6 +150,7 @@ export default function AddProperty() {
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
             />
           </div>
+
           <div>
             <label className="block font-medium text-gray-700 mb-1">City</label>
             <input
@@ -143,8 +162,11 @@ export default function AddProperty() {
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
             />
           </div>
+
           <div>
-            <label className="block font-medium text-gray-700 mb-1">State</label>
+            <label className="block font-medium text-gray-700 mb-1">
+              State
+            </label>
             <input
               type="text"
               name="state"
@@ -186,7 +208,7 @@ export default function AddProperty() {
           />
         </div>
 
-        {/* Submit */}
+        {/* Submit Button */}
         <div className="flex justify-center">
           <button
             type="submit"
