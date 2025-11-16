@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 
 export default function PropertyCard({ property }) {
-  property = property || {};
-  const tags = property.tags || [];
+  if (!property) property = {};
 
+  const features = property.features || [];
   const safetyScore =
     property.safety_score || Math.floor(Math.random() * 10) + 1;
   const avgRating = property.avgRating || (Math.random() * 5).toFixed(1);
@@ -19,15 +19,25 @@ export default function PropertyCard({ property }) {
         />
 
         <div className="p-4">
-          <h3 className="text-lg font-semibold text-gray-800">{property.title}</h3>
-          <p className="text-gray-500 text-sm">{property.location}</p>
+          {/* Title */}
+          <h3 className="text-lg font-semibold text-gray-800">
+            {property.title || "Untitled Property"}
+          </h3>
 
+          {/* Location */}
+          <p className="text-gray-500 text-sm">
+            {property.address
+              ? `${property.address}, ${property.city}, ${property.state}`
+              : "Location not provided"}
+          </p>
+
+          {/* Price */}
           <p className="text-blue-600 font-bold mt-2 text-lg">
             ₹{property.price}/month
           </p>
 
           <div className="mt-3 flex flex-wrap gap-2">
-            {tags.map((tag, index) => (
+            {(features || []).map((feature, index) => (
               <span
                 key={index}
                 className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"

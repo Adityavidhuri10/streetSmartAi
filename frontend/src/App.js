@@ -10,6 +10,7 @@ import AgreementAnalyzer from "./pages/AgreementAnalyzer";
 import AddProperty from "./pages/AddProperty";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import Discussion from "./pages/Discussion";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/property/:id" element={<PropertyDetail />} />
           <Route path="/agreement-analyzer" element={<AgreementAnalyzer />} />
           <Route path="/add-property" element={<AddProperty />} />
+          <Route path="/discussions" element={<Discussion />} />
         </Routes>
       </main>
 

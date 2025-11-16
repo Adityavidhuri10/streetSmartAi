@@ -47,6 +47,14 @@ export default function Navbar() {
           >
             AI Analyzer
           </NavLink>
+          <NavLink
+            to="/discussions"
+            className={({ isActive }) =>
+              isActive ? "text-blue-600" : "hover:text-blue-600"
+            }
+          >
+            Discussions
+          </NavLink>
 
           {/* ONLY OWNERS CAN SEE "ADD PROPERTY" */}
           {user?.role === "landlord" && (
