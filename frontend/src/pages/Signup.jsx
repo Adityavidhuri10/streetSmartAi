@@ -51,7 +51,7 @@ export default function Signup() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-black-500"
         />
         <input
           type="email"
@@ -59,7 +59,7 @@ export default function Signup() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-black-500"
         />
         <input
           type="password"
@@ -67,14 +67,14 @@ export default function Signup() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-black-500"
         />
 
         {/* Role Selector */}
         <select
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-black-500"
         >
           <option value="tenant">Tenant</option>
           <option value="landlord">Landlord</option>

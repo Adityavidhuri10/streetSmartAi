@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
-    <section className="text-center py-20 bg-gradient-to-r from-blue-700 to-cyan-600 text-white">
+    <section className="text-center py-20 bg-gradient-to-r from-black via-gray-900 to-black text-white animate-fadeIn">
       <h1 className="text-4xl md:text-5xl font-bold mb-4">
         Find Your Perfect Home with Confidence
       </h1>
@@ -11,7 +11,7 @@ export default function Home() {
       </p>
       <Link
         to="/properties"
-        className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:scale-105 shadow transition"
+        className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:scale-105 shadow transition"
       >
         Browse Properties
       </Link>

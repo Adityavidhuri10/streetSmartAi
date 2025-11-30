@@ -14,66 +14,169 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white shadow-md py-4">
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-4">
-        <NavLink to="/" className="text-2xl font-bold text-blue-600">
-          StreetSmart AI
+    <nav className="bg-white border-b backdrop-blur-md sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-3">
+
+        {/* LOGO */}
+        <NavLink to="/" className="flex items-center gap-3">
+          <div className="h-10 w-10 bg-black text-white rounded-xl flex items-center justify-center">
+            {/* House Icon */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="white"
+              strokeWidth={1.8}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h4m6 0h4a1 1 0 001-1V10"
+              />
+            </svg>
+          </div>
+          <span className="text-2xl font-semibold tracking-tight">StreetSmart AI</span>
         </NavLink>
 
-        <div className="hidden md:flex gap-6 text-gray-700 font-medium">
+        {/* NAV LINKS */}
+        <div className="hidden md:flex items-center gap-8 text-gray-700 font-medium">
+
+          {/* HOME */}
           <NavLink
             to="/"
             className={({ isActive }) =>
-              isActive ? "text-blue-600" : "hover:text-blue-600"
+              `flex items-center gap-2 relative hover:text-black transition ${isActive ? "text-black" : ""
+              } group`
             }
           >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.8}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h4m6 0h4a1 1 0 001-1V10"
+              />
+            </svg>
             Home
+            <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-black group-hover:w-full transition-all duration-300"></span>
           </NavLink>
 
+          {/* PROPERTIES */}
           <NavLink
             to="/properties"
             className={({ isActive }) =>
-              isActive ? "text-blue-600" : "hover:text-blue-600"
+              `flex items-center gap-2 relative hover:text-black transition ${isActive ? "text-black" : ""
+              } group`
             }
           >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.8}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 10l8-8 8 8M5 11v9a1 1 0 001 1h4m4 0h4a1 1 0 001-1v-9"
+              />
+            </svg>
             Properties
+            <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-black group-hover:w-full transition-all duration-300"></span>
           </NavLink>
 
+          {/* AI ANALYZER */}
           <NavLink
             to="/analyzer"
             className={({ isActive }) =>
-              isActive ? "text-blue-600" : "hover:text-blue-600"
+              `flex items-center gap-2 relative hover:text-black transition ${isActive ? "text-black" : ""
+              } group`
             }
           >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.8}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12h6M9 16h6M7 4h10a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z"
+              />
+            </svg>
             AI Analyzer
+            <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-black group-hover:w-full transition-all duration-300"></span>
           </NavLink>
+
+          {/* DISCUSSIONS */}
           <NavLink
             to="/discussions"
             className={({ isActive }) =>
-              isActive ? "text-blue-600" : "hover:text-blue-600"
+              `flex items-center gap-2 relative hover:text-black transition ${isActive ? "text-black" : ""
+              } group`
             }
           >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.8}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8 10h8m-8 4h6M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
             Discussions
+            <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-black group-hover:w-full transition-all duration-300"></span>
           </NavLink>
 
-          {/* ONLY OWNERS CAN SEE "ADD PROPERTY" */}
+          {/* LANDLORD OPTION */}
           {user?.role === "landlord" && (
             <NavLink
               to="/add-property"
               className={({ isActive }) =>
-                isActive ? "text-blue-600" : "hover:text-blue-600"
+                `flex items-center gap-2 relative hover:text-black transition ${isActive ? "text-black" : ""
+                } group`
               }
             >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.8}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
               Add Property
+              <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-black group-hover:w-full transition-all duration-300"></span>
             </NavLink>
           )}
         </div>
 
-        <div className="flex gap-3">
+        {/* AUTH BUTTONS */}
+        <div className="flex items-center gap-3">
           {isLoggedIn ? (
             <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition"
+              className="px-5 py-2 bg-black text-white rounded-xl hover:bg-gray-900 transition shadow-sm"
             >
               Logout
             </button>
@@ -81,14 +184,14 @@ export default function Navbar() {
             <>
               <NavLink
                 to="/login"
-                className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition"
+                className="px-4 py-2 border border-gray-300 rounded-xl text-gray-800 hover:bg-gray-100 transition shadow-sm"
               >
                 Login
               </NavLink>
 
               <NavLink
                 to="/signup"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                className="px-5 py-2 bg-black text-white rounded-xl hover:bg-gray-900 transition shadow-sm"
               >
                 Sign Up
               </NavLink>

@@ -41,7 +41,7 @@ export default function Login() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-black-500"
         />
         <input
           type="password"
@@ -49,11 +49,11 @@ export default function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-black-500"
         />
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+          className="w-full bg-black-600 text-white py-2 rounded-lg hover:bg-black-700"
         >
           Login
         </button>
@@ -63,7 +63,7 @@ export default function Login() {
 
       <p className="text-center text-gray-500 mt-4">
         Don’t have an account?{" "}
-        <a href="/signup" className="text-blue-600 hover:underline">
+        <a href="/signup" className="text-black-600 hover:underline">
           Sign Up
         </a>
       </p>

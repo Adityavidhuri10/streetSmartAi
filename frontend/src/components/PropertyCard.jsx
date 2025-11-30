@@ -32,7 +32,7 @@ export default function PropertyCard({ property }) {
           </p>
 
           {/* Price */}
-          <p className="text-blue-600 font-bold mt-2 text-lg">
+          <p className="text-black-600 font-bold mt-2 text-lg">
             ₹{property.price}/month
           </p>
 

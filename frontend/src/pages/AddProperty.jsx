@@ -3,7 +3,7 @@ import API from "../utils/api";
 import { AuthContext } from "../context/AuthContext";
 
 export default function AddProperty() {
-  const { user, token } = useContext(AuthContext); // Get logged-in user + token
+  const { user, token } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -19,19 +19,16 @@ export default function AddProperty() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Update form data
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
     try {
-      // Convert comma-separated values into arrays
       const featuresArray = formData.features
         .split(",")
         .map((f) => f.trim())
@@ -42,30 +39,20 @@ export default function AddProperty() {
         .map((i) => i.trim())
         .filter(Boolean);
 
-      // Property data
       const newProperty = {
-        title: formData.title,
-        description: formData.description,
+        ...formData,
         price: Number(formData.price),
-        address: formData.address,
-        city: formData.city,
-        state: formData.state,
         features: featuresArray,
         images: imagesArray,
         safety_score: Math.floor(Math.random() * 10) + 1,
-        owner: user?._id, // Logged-in landlord ID
+        owner: user?._id,
       };
 
-      // API request with JWT
       await API.post("/properties", newProperty, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       setMessage("✅ Property added successfully!");
-
-      // Clear form
       setFormData({
         title: "",
         description: "",
@@ -76,164 +63,177 @@ export default function AddProperty() {
         features: "",
         images: "",
       });
-    } catch (error) {
-      console.error("Error adding property:", error);
-      setMessage("❌ Failed to add property. Check console for details.");
+    } catch (err) {
+      console.error(err);
+      setMessage("❌ Failed to add property.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10">
-      <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
-        🏡 Add New Property
-      </h1>
+    <div className="max-w-3xl mx-auto px-6 py-12 animate-fadeIn">
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-
-        {/* Title */}
-        <div>
-          <label className="block font-medium text-gray-700 mb-1">Title</label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
-          />
+      {/* HEADER */}
+      <div className="text-center mb-10">
+        <div className="mx-auto w-16 h-16 flex items-center justify-center bg-black text-white rounded-2xl shadow-md">
+          {/* Outline house icon */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-9 h-9"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="white"
+            strokeWidth={1.8}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h4m10-11v10a1 1 0 01-1 1h-4m-6 0h6"
+            />
+          </svg>
         </div>
 
-        {/* Description */}
-        <div>
-          <label className="block font-medium text-gray-700 mb-1">
-            Description
-          </label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            rows="4"
-            required
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
-          />
-        </div>
+        <h1 className="text-3xl font-bold mt-5 text-gray-800 tracking-tight">
+          Add New Property
+        </h1>
+      </div>
 
-        {/* Price */}
-        <div>
-          <label className="block font-medium text-gray-700 mb-1">
-            Price (₹/month)
-          </label>
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            required
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
-          />
-        </div>
+      {/* CARD FORM CONTAINER */}
+      <div className="bg-white/80 backdrop-blur-xl shadow-lg rounded-2xl p-8 border">
+        <form onSubmit={handleSubmit} className="space-y-6">
 
-        {/* Address, City, State */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* Title */}
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Title</label>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              required
+              className="input-modern"
+            />
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Description</label>
+            <textarea
+              name="description"
+              rows="4"
+              value={formData.description}
+              onChange={handleChange}
+              required
+              className="input-modern"
+            ></textarea>
+          </div>
+
+          {/* Price */}
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Price (₹/month)</label>
+            <input
+              type="number"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              required
+              className="input-modern"
+            />
+          </div>
+
+          {/* ADDRESS GRID */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label className="block font-medium text-gray-700 mb-1">Address</label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+                className="input-modern"
+              />
+            </div>
+
+            <div>
+              <label className="block font-medium text-gray-700 mb-1">City</label>
+              <input
+                type="text"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                required
+                className="input-modern"
+              />
+            </div>
+
+            <div>
+              <label className="block font-medium text-gray-700 mb-1">State</label>
+              <input
+                type="text"
+                name="state"
+                value={formData.state}
+                onChange={handleChange}
+                required
+                className="input-modern"
+              />
+            </div>
+          </div>
+
+          {/* FEATURES */}
           <div>
             <label className="block font-medium text-gray-700 mb-1">
-              Address
+              Features (comma-separated)
             </label>
             <input
               type="text"
-              name="address"
-              value={formData.address}
+              name="features"
+              placeholder="WiFi, Parking, Security, Gym..."
+              value={formData.features}
               onChange={handleChange}
-              required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
+              className="input-modern"
             />
           </div>
 
-          <div>
-            <label className="block font-medium text-gray-700 mb-1">City</label>
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
-            />
-          </div>
-
+          {/* IMAGES */}
           <div>
             <label className="block font-medium text-gray-700 mb-1">
-              State
+              Image URLs (comma-separated)
             </label>
             <input
               type="text"
-              name="state"
-              value={formData.state}
+              name="images"
+              placeholder="https://img1.com, https://img2.com"
+              value={formData.images}
               onChange={handleChange}
-              required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
+              className="input-modern"
             />
           </div>
-        </div>
 
-        {/* Features */}
-        <div>
-          <label className="block font-medium text-gray-700 mb-1">
-            Features (comma-separated)
-          </label>
-          <input
-            type="text"
-            name="features"
-            value={formData.features}
-            onChange={handleChange}
-            placeholder="WiFi, Parking, Security, Gym"
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
-          />
-        </div>
-
-        {/* Images */}
-        <div>
-          <label className="block font-medium text-gray-700 mb-1">
-            Image URLs (comma-separated)
-          </label>
-          <input
-            type="text"
-            name="images"
-            value={formData.images}
-            onChange={handleChange}
-            placeholder="https://image1.com, https://image2.com"
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-blue-500"
-          />
-        </div>
-
-        {/* Submit Button */}
-        <div className="flex justify-center">
+          {/* SUBMIT BUTTON */}
           <button
             type="submit"
             disabled={loading}
-            className={`px-6 py-2 rounded-lg text-white font-semibold ${
-              loading
-                ? "bg-gray-400"
-                : "bg-blue-600 hover:bg-blue-700 transition duration-300"
-            }`}
+            className={`w-full py-3 text-lg font-semibold text-white rounded-xl shadow-md transition ${loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-black hover:bg-gray-900"
+              }`}
           >
             {loading ? "Submitting..." : "Add Property"}
           </button>
-        </div>
-      </form>
+        </form>
 
-      {/* Message */}
-      {message && (
-        <p
-          className={`text-center mt-6 font-medium ${
-            message.startsWith("✅") ? "text-green-600" : "text-red-600"
-          }`}
-        >
-          {message}
-        </p>
-      )}
+        {/* MESSAGE */}
+        {message && (
+          <p
+            className={`text-center mt-6 font-medium ${message.startsWith("✅") ? "text-green-600" : "text-red-600"
+              }`}
+          >
+            {message}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

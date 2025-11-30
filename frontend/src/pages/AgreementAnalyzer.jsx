@@ -43,7 +43,7 @@ export default function AgreementAnalyzer() {
         value={agreementText}
         onChange={(e) => setAgreementText(e.target.value)}
         rows={10}
-        className="w-full border border-gray-300 rounded-lg p-4 text-gray-700 focus:outline-blue-500 resize-none"
+        className="w-full border border-gray-300 rounded-lg p-4 text-gray-700 focus:outline-black-500 resize-none"
       ></textarea>
 
       <div className="flex justify-center mt-6">
@@ -51,7 +51,7 @@ export default function AgreementAnalyzer() {
           onClick={handleAnalyze}
           disabled={!agreementText || loading}
           className={`px-6 py-2 rounded-lg text-white ${
-            loading ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"
+            loading ? "bg-gray-400" : "bg-black-600 hover:bg-black-700"
           }`}
         >
           {loading ? "Analyzing..." : "Analyze Agreement"}

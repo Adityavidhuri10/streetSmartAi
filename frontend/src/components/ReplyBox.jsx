@@ -29,7 +29,7 @@ export default function ReplyBox({ placeholder = "Write a reply...", onSubmit })
       <button
         onClick={send}
         disabled={sending}
-        className="bg-blue-600 text-white px-3 py-2 rounded-md"
+        className="bg-black-600 text-white px-3 py-2 rounded-md"
       >
         📤
       </button>
