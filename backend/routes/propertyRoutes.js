@@ -1,22 +1,36 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   getProperties,
   getPropertyById,
   createProperty,
   updateProperty,
   deleteProperty,
-} = require("../controllers/propertyController");
+} from "../controllers/propertyController.js";
 
-const { protect, authorizeRoles } = require("../middleware/authMiddleware");
+import { protect, authorizeRoles } from "../middleware/authMiddleware.js";
+import upload from "../config/multer.js";
+
 const router = express.Router();
 
-router.route("/")
+router
+  .route("/")
   .get(getProperties)
-  .post(protect, authorizeRoles("landlord"), createProperty);
+  .post(
+    protect,
+    authorizeRoles("landlord"),
+    upload.array("images", 10),
+    createProperty
+  );
 
-router.route("/:id")
+router
+  .route("/:id")
   .get(getPropertyById)
-  .put(protect, authorizeRoles("landlord"), updateProperty)
+  .put(
+    protect,
+    authorizeRoles("landlord"),
+    upload.array("images", 10),
+    updateProperty
+  )
   .delete(protect, authorizeRoles("landlord"), deleteProperty);
 
-module.exports = router;
+export default router;

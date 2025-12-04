@@ -1,60 +1,84 @@
+import { AuthContext } from "../context/AuthContext";
+import API from "../utils/api";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 
 export default function PropertyCard({ property }) {
-  if (!property) property = {};
+  const { user, token } = useContext(AuthContext);
 
-  const features = property.features || [];
-  const safetyScore =
-    property.safety_score || Math.floor(Math.random() * 10) + 1;
-  const avgRating = property.avgRating || (Math.random() * 5).toFixed(1);
+  const handleDelete = async () => {
+  if (!window.confirm("Are you sure you want to delete this property?")) return;
+
+  try {
+    await API.delete(`/properties/${property._id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    alert("Property deleted successfully!");
+    window.location.reload();
+  } catch (err) {
+    console.error(err);
+    alert("Failed to delete property.");
+  }
+};
+
 
   return (
-    <Link to={`/property/${property._id}`}>
-      <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+    <div className="bg-white rounded-2xl shadow-md p-4 hover:shadow-xl transition">
 
+      {/* Property Image */}
+      <Link to={`/property/${property._id}`}>
         <img
-          src={(property.images && property.images[0]) || "https://via.placeholder.com/400"}
+          src={property.images?.[0] || "/placeholder.jpg"}
           alt={property.title}
-          className="h-48 w-full object-cover"
+          className="w-full h-48 object-cover rounded-xl mb-4"
         />
+      </Link>
 
-        <div className="p-4">
-          {/* Title */}
-          <h3 className="text-lg font-semibold text-gray-800">
-            {property.title || "Untitled Property"}
-          </h3>
+      {/* Title */}
+      <h2 className="text-lg font-semibold text-gray-900 mb-1">
+        {property.title}
+      </h2>
 
-          {/* Location */}
-          <p className="text-gray-500 text-sm">
-            {property.address
-              ? `${property.address}, ${property.city}, ${property.state}`
-              : "Location not provided"}
-          </p>
+      {/* Address */}
+      <p className="text-sm text-gray-500">
+        {property.address}, {property.city}, {property.state}
+      </p>
 
-          {/* Price */}
-          <p className="text-black-600 font-bold mt-2 text-lg">
-            ₹{property.price}/month
-          </p>
+      {/* Price */}
+      <p className="text-xl font-bold mt-2">
+        ₹{property.price}/month
+      </p>
 
-          <div className="mt-3 flex flex-wrap gap-2">
-            {(features || []).map((feature, index) => (
-              <span
-                key={index}
-                className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
-              >
-                {feature}
-              </span>
-            ))}
-          </div>
-
-          <div className="border-t mt-3 mb-2" />
-
-          <div className="flex justify-between items-center text-sm">
-            <p className="text-gray-500">Safety: {safetyScore}/10</p>
-            <p className="text-yellow-500 font-semibold">★ {avgRating}</p>
-          </div>
-        </div>
+      {/* Features */}
+      <div className="mt-2 flex flex-wrap gap-2">
+        {property.features?.slice(0, 3).map((f, i) => (
+          <span
+            key={i}
+            className="text-xs bg-gray-100 px-2 py-1 rounded-md text-gray-700"
+          >
+            {f}
+          </span>
+        ))}
       </div>
-    </Link>
+
+      {/* Safety score */}
+      <p className="text-sm text-gray-600 mt-2">
+        Safety: {property.safety_score}/10 ⭐
+      </p>
+
+      {/* DELETE BUTTON — ONLY IF YOU ARE THE OWNER */}
+     {user?._id === property.owner?._id && (
+  <button
+    onClick={handleDelete}
+    className="mt-3 px-3 py-1.5 text-sm rounded-md 
+               bg-neutral-200 text-neutral-700 
+               hover:bg-neutral-300 transition border border-neutral-300"
+  >
+    Delete
+  </button>
+)}
+
+    </div>
   );
 }

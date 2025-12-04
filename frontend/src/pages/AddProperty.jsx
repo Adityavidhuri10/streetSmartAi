@@ -13,8 +13,10 @@ export default function AddProperty() {
     city: "",
     state: "",
     features: "",
-    images: "",
   });
+
+  const [images, setImages] = useState([]);            // File objects
+  const [imagePreviews, setImagePreviews] = useState([]); // Preview URLs
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -23,6 +25,30 @@ export default function AddProperty() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle file selection + preview
+ const handleImageChange = (e) => {
+  const newFiles = Array.from(e.target.files);
+
+  // Merge old + new images
+  const updatedImages = [...images, ...newFiles];
+  setImages(updatedImages);
+
+  // previews
+  const previews = updatedImages.map((file) => URL.createObjectURL(file));
+  setImagePreviews(previews);
+};
+
+
+  // Remove selected file BEFORE uploading
+  const removeImage = (index) => {
+    const newImages = images.filter((_, i) => i !== index);
+    const newPreviews = imagePreviews.filter((_, i) => i !== index);
+
+    setImages(newImages);
+    setImagePreviews(newPreviews);
+  };
+
+  // Submit Form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -34,22 +60,30 @@ export default function AddProperty() {
         .map((f) => f.trim())
         .filter(Boolean);
 
-      const imagesArray = formData.images
-        .split(",")
-        .map((i) => i.trim())
-        .filter(Boolean);
+      const fd = new FormData();
 
-      const newProperty = {
-        ...formData,
-        price: Number(formData.price),
-        features: featuresArray,
-        images: imagesArray,
-        safety_score: Math.floor(Math.random() * 10) + 1,
-        owner: user?._id,
-      };
+      fd.append("title", formData.title);
+      fd.append("description", formData.description);
+      fd.append("price", Number(formData.price));
+      fd.append("address", formData.address);
+      fd.append("city", formData.city);
+      fd.append("state", formData.state);
+      fd.append("owner", user?._id);
+      fd.append("safety_score", Math.floor(Math.random() * 10) + 1);
 
-      await API.post("/properties", newProperty, {
-        headers: { Authorization: `Bearer ${token}` },
+      featuresArray.forEach((item) => fd.append("features", item));
+
+      // Append image files
+      images.forEach((img) => {
+  fd.append("images", img);  // MUST BE SAME FIELD NAME
+});
+
+
+      await API.post("/properties", fd, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       setMessage("✅ Property added successfully!");
@@ -61,11 +95,12 @@ export default function AddProperty() {
         city: "",
         state: "",
         features: "",
-        images: "",
       });
+      setImages([]);
+      setImagePreviews([]);
     } catch (err) {
       console.error(err);
-      setMessage("❌ Failed to add property.");
+      setMessage("Failed to add property.");
     } finally {
       setLoading(false);
     }
@@ -73,11 +108,10 @@ export default function AddProperty() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12 animate-fadeIn">
-
       {/* HEADER */}
       <div className="text-center mb-10">
         <div className="mx-auto w-16 h-16 flex items-center justify-center bg-black text-white rounded-2xl shadow-md">
-          {/* Outline house icon */}
+          {/* Outline Home Icon */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-9 h-9"
@@ -99,7 +133,7 @@ export default function AddProperty() {
         </h1>
       </div>
 
-      {/* CARD FORM CONTAINER */}
+      {/* FORM CARD */}
       <div className="bg-white/80 backdrop-blur-xl shadow-lg rounded-2xl p-8 border">
         <form onSubmit={handleSubmit} className="space-y-6">
 
@@ -131,7 +165,9 @@ export default function AddProperty() {
 
           {/* Price */}
           <div>
-            <label className="block font-medium text-gray-700 mb-1">Price (₹/month)</label>
+            <label className="block font-medium text-gray-700 mb-1">
+              Price (₹/month)
+            </label>
             <input
               type="number"
               name="price"
@@ -142,7 +178,7 @@ export default function AddProperty() {
             />
           </div>
 
-          {/* ADDRESS GRID */}
+          {/* Address Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block font-medium text-gray-700 mb-1">Address</label>
@@ -181,7 +217,7 @@ export default function AddProperty() {
             </div>
           </div>
 
-          {/* FEATURES */}
+          {/* Features */}
           <div>
             <label className="block font-medium text-gray-700 mb-1">
               Features (comma-separated)
@@ -196,29 +232,52 @@ export default function AddProperty() {
             />
           </div>
 
-          {/* IMAGES */}
+          {/* IMAGES UPLOAD */}
           <div>
             <label className="block font-medium text-gray-700 mb-1">
-              Image URLs (comma-separated)
+              Upload Images
             </label>
+
             <input
-              type="text"
-              name="images"
-              placeholder="https://img1.com, https://img2.com"
-              value={formData.images}
-              onChange={handleChange}
-              className="input-modern"
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full border rounded-lg px-4 py-2"
             />
+
+            {/* Preview Selected Images */}
+            {imagePreviews.length > 0 && (
+              <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {imagePreviews.map((url, index) => (
+                  <div key={index} className="relative group">
+                    <img
+                      src={url}
+                      alt="Preview"
+                      className="w-full h-32 object-cover rounded-lg shadow-md"
+                    />
+
+                    {/* Remove Button */}
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute top-1 right-1 bg-black/70 text-white w-7 h-7 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* SUBMIT BUTTON */}
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 text-lg font-semibold text-white rounded-xl shadow-md transition ${loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-black hover:bg-gray-900"
-              }`}
+            className={`w-full py-3 text-lg font-semibold text-white rounded-xl shadow-md transition ${
+              loading ? "bg-gray-400" : "bg-black hover:bg-gray-900"
+            }`}
           >
             {loading ? "Submitting..." : "Add Property"}
           </button>
@@ -227,8 +286,9 @@ export default function AddProperty() {
         {/* MESSAGE */}
         {message && (
           <p
-            className={`text-center mt-6 font-medium ${message.startsWith("✅") ? "text-green-600" : "text-red-600"
-              }`}
+            className={`text-center mt-6 font-medium ${
+              message.startsWith("✅") ? "text-green-600" : "text-red-600"
+            }`}
           >
             {message}
           </p>
