@@ -7,7 +7,6 @@ export default function PropertyDetail() {
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Fetch property by ID (from backend)
   useEffect(() => {
     const fetchProperty = async () => {
       try {
@@ -15,7 +14,6 @@ export default function PropertyDetail() {
         setProperty(res.data);
       } catch (error) {
         console.error("Error fetching property:", error);
-        setProperty(null);
       } finally {
         setLoading(false);
       }
@@ -24,115 +22,122 @@ export default function PropertyDetail() {
   }, [id]);
 
   if (loading)
-    return <p className="text-center py-20 text-gray-500">Loading property...</p>;
+    return <p className="text-center py-10 text-gray-500">Loading property...</p>;
 
   if (!property)
-    return <p className="text-center py-20 text-gray-500">Property not found.</p>;
+    return <p className="text-center py-10 text-gray-500">Property not found.</p>;
 
   return (
-  <div className="max-w-6xl mx-auto px-6 py-10 animate-fadeIn">
+    <div className="max-w-7xl mx-auto px-4 py-8">
 
-    {/* 🏠 Image Section with subtle zoom */}
-    <div className="overflow-hidden rounded-2xl shadow-xl">
-      <img
-        src={property.images?.[0] || property.image}
-        alt={property.title}
-        className="w-full h-[400px] object-cover transition-transform duration-500 hover:scale-105"
-      />
-    </div>
-
-    {/* Title & Location */}
-    <div className="mt-6">
-      <h1 className="text-4xl font-extrabold text-gray-900">
-        {property.title}
-      </h1>
-      <p className="text-gray-500 mt-1 text-lg">
-        📍 {property.address}, {property.city}
-      </p>
-    </div>
-
-    {/* Price Card */}
-    <div className="mt-4 bg-gradient-to-r from-black via-gray-900 to-black text-white px-6 py-4 rounded-xl shadow-lg inline-block">
-      <p className="text-3xl font-semibold">₹{property.price}/month</p>
-    </div>
-
-    <div className="border-t mt-8 mb-6"></div>
-
-    {/* Description */}
-    <div className="mt-4">
-      <h2 className="text-2xl font-semibold mb-2">Description</h2>
-      <p className="text-gray-700 leading-relaxed text-lg">
-        {property.description ||
-          "Spacious, well-lit flat in a great neighborhood. Perfect for working professionals or families looking for comfort and convenience."}
-      </p>
-    </div>
-
-    {/* Features */}
-    <div className="mt-8">
-      <h2 className="text-2xl font-semibold mb-3">Features</h2>
-      <div className="flex flex-wrap gap-3">
-        {property.features && property.features.length > 0 ? (
-          property.features.map((feature, i) => (
-            <span
-              key={i}
-              className="px-4 py-2 bg-white/70 backdrop-blur-sm shadow text-gray-800 rounded-full text-sm border hover:bg-black hover:text-white transition"
-            >
-              {feature}
-            </span>
-          ))
-        ) : (
-          <p className="text-gray-500">No features listed.</p>
-        )}
+      {/* HERO IMAGE */}
+      <div className="w-full h-72 md:h-96 rounded-xl overflow-hidden shadow-sm mb-8">
+        <img
+          src={property.images?.[0] || property.images || property.image}
+          alt={property.title}
+          className="w-full h-full object-cover"
+        />
       </div>
-    </div>
 
-    {/* Safety Score */}
-    {property.safety_score !== null && (
-      <div className="mt-10">
-        <h2 className="text-2xl font-semibold mb-3">Safety Score</h2>
+      {/* MAIN CONTENT */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
-        <div className="relative w-full bg-gray-200 h-4 rounded-full overflow-hidden">
-          <div
-            className={`h-4 transition-all duration-700 ${
-              property.safety_score >= 7
-                ? "bg-green-500"
-                : property.safety_score >= 4
-                ? "bg-yellow-400"
-                : "bg-red-500"
-            }`}
-            style={{ width: `${(property.safety_score / 10) * 100}%` }}
-          ></div>
-        </div>
-        <p className="mt-2 text-gray-600 text-lg">
-          {property.safety_score}/10 — AI Safety Index
-        </p>
-      </div>
-    )}
+        {/* Left Content */}
+        <div className="lg:col-span-2 space-y-8">
 
-    {/* Reviews Section */}
-    <div className="mt-12">
-      <h2 className="text-2xl font-semibold mb-4">User Reviews</h2>
+          {/* TITLE + LOCATION */}
+          <div>
+            <h1 className="text-4xl font-bold text-gray-900">
+              {property.title}
+            </h1>
 
-      {property.reviews && property.reviews.length > 0 ? (
-        property.reviews.map((review, i) => (
-          <div
-            key={i}
-            className="p-5 mb-4 rounded-xl bg-white/60 backdrop-blur shadow border hover:shadow-xl transition"
-          >
-            <p className="italic text-gray-700 text-lg">“{review.comment}”</p>
-            <p className="text-sm text-gray-500 mt-2">— {review.user || "Anonymous"}</p>
+            <p className="text-gray-500 mt-2 flex items-center gap-2">
+              📍 {property.address}, {property.city}
+            </p>
+
+            {/* PRICE */}
+            <p className="text-4xl font-bold text-gray-900 mt-4">
+              ₹{property.price?.toLocaleString()}/month
+            </p>
+
+            {/* RATING */}
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-yellow-500 text-xl">⭐</span>
+              <span className="font-medium text-gray-700">N/A</span>
+              <span className="text-gray-500">(0 reviews)</span>
+            </div>
           </div>
-        ))
-      ) : (
-        <div className="p-6 rounded-xl bg-white/60 backdrop-blur shadow border">
-          <p className="italic text-gray-700 text-lg">
-            “Peaceful area, near market and metro. Safe for families.”
-          </p>
-          <p className="text-sm text-gray-500 mt-2">— A Verified Tenant</p>
-        </div>
-      )}
-    </div>
-  </div>
-);
 
+          {/* FEATURES */}
+          <div>
+            <h2 className="text-xl font-semibold mb-2">Features</h2>
+
+            <div className="flex flex-wrap gap-2">
+              {property.features?.length > 0 ? (
+                property.features.map((feature, i) => (
+                  <span
+                    key={i}
+                    className="px-4 py-1 rounded-full bg-gray-100 text-gray-700 text-sm shadow-sm"
+                  >
+                    {feature}
+                  </span>
+                ))
+              ) : (
+                <p className="text-gray-500">No features listed.</p>
+              )}
+            </div>
+          </div>
+
+          {/* DESCRIPTION */}
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h2 className="text-xl font-semibold mb-3">Description</h2>
+            <p className="text-gray-700 leading-relaxed">
+              {property.description || "No description available."}
+            </p>
+          </div>
+
+          {/* REVIEWS */}
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h2 className="text-xl font-semibold mb-4">Reviews (0)</h2>
+
+            <div className="text-center text-gray-500 py-6">
+              No reviews yet.
+            </div>
+          </div>
+        </div>
+
+        {/* Right Sidebar */}
+        <div className="space-y-8">
+
+          {/* OWNER DETAILS */}
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h3 className="text-lg font-semibold mb-4">Owner Details</h3>
+
+            <p className="font-medium text-gray-900 flex items-center gap-2">
+              👤 {property.owner?.name || "Owner"}
+            </p>
+            <p className="text-gray-500 mt-1">
+              {property.owner?.email || "owner@example.com"}
+            </p>
+          </div>
+
+          {/* PAYMENT CARD */}
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h3 className="text-lg font-semibold mb-2">Payment</h3>
+            <p className="text-gray-600 mb-4">
+              Secure your booking with a deposit payment
+            </p>
+
+            <button className="w-full bg-gray-900 hover:bg-black text-white font-semibold py-3 rounded-lg transition">
+              Pay Deposit ₹{property.price?.toLocaleString()}
+            </button>
+
+            <p className="text-xs text-gray-500 text-center mt-2">
+              Powered by Stripe • Secure Payment
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
