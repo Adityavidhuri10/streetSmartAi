@@ -119,11 +119,3 @@ export const deleteProperty = asyncHandler(async (req, res) => {
   await property.deleteOne();
   res.json({ message: "Property removed successfully" });
 });
-
-module.exports = {
-  getProperties,
-  getPropertyById,
-  createProperty,
-  updateProperty,
-  deleteProperty,
-};
