@@ -53,10 +53,11 @@ export default function Login() {
         />
         <button
           type="submit"
-          className="w-full bg-black-600 text-white py-2 rounded-lg hover:bg-black-700"
+          className="w-full bg-black text-white py-2 rounded-lg hover:bg-black/80 transition"
         >
           Login
         </button>
+
       </form>
 
       {error && <p className="text-red-600 text-center mt-4">{error}</p>}
