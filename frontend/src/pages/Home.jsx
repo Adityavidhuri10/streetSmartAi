@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
+import cityImg from "../city.jpg";
 
 export default function Home() {
   return (
     <section
       className="relative h-[85vh] flex flex-col justify-center items-center text-center text-white"
       style={{ 
-        backgroundImage: `url('/city.jpg')`, 
+        backgroundImage: `url(${cityImg})`, 
         backgroundSize: "cover",
         backgroundPosition: "cover",
       }}
