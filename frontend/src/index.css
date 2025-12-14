@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.input-modern {
+  @apply w-full 
+         rounded-xl 
+         px-4 py-2 
+         border border-gray-300 
+         bg-white
+         text-gray-800
+         shadow-sm 
+         focus:ring-2 focus:ring-black 
+         focus:border-black 
+         focus:outline-none 
+         transition;
+}
+

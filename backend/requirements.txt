@@ -1,0 +1,7 @@
+pymupdf
+pytesseract
+spacy
+pdf2image
+google-generativeai
+python-dotenv
+playwright

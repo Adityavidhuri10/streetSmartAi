@@ -1,0 +1,43 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Env files
+.env
+
+# Builds
+dist/
+build/
+
+# Uploads (optional – remove if you want uploads in git)
+uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# VS Code
+.vscode/
+
+# =========================
+# Scraper generated data
+# =========================
+Scrapper/scraped_data/
+Scrapper/scraped_data/**
+
+# Images
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+
+# Optional: ignore PDFs if scraped
+*.pdf
+
+frontend_backup/
